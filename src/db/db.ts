@@ -84,3 +84,25 @@ export async function seedDefaultCategories(): Promise<void> {
     );
   });
 }
+
+export const COFRINHO_CATEGORY_NAME = "Cofrinho";
+
+/**
+ * Money moved into a savings goal is recorded as a regular expense under this
+ * category, so it reduces the available budget the same way any other
+ * spending would — otherwise the same balance could be "spent" on a goal and
+ * still show up as available to spend elsewhere.
+ */
+export async function getOrCreateCofrinhoCategoryId(): Promise<number> {
+  return db.transaction("rw", db.categories, async () => {
+    const existing = await db.categories.where("name").equals(COFRINHO_CATEGORY_NAME).first();
+    if (existing) return existing.id!;
+    const newId = await db.categories.add({
+      name: COFRINHO_CATEGORY_NAME,
+      color: "#4a3aa7", // violet — distinct from the spending category palette
+      icon: "piggyBank",
+      createdAt: new Date().toISOString(),
+    });
+    return newId!;
+  });
+}

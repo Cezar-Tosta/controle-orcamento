@@ -1,11 +1,12 @@
 import { useMemo, useState } from "react";
 import type { JSX } from "react";
-import { db } from "../db/db.ts";
+import { db, getOrCreateCofrinhoCategoryId } from "../db/db.ts";
 import type { Goal } from "../db/db.ts";
 import { useGoals } from "../hooks/useLiveData.ts";
 import { useCurrentBudgetStatus } from "../hooks/useBudgetStatus.ts";
 import { findAffordableGoal, goalRemainingAmount } from "../utils/budget.ts";
 import { formatCurrency } from "../utils/format.ts";
+import { todayISO } from "../utils/date.ts";
 import { Icon } from "../components/Icon.tsx";
 import { Sheet } from "../components/Sheet.tsx";
 import { GoalForm } from "../components/GoalForm.tsx";
@@ -49,7 +50,17 @@ export function GoalsPage(): JSX.Element {
     const savedAmount = goal.savedAmount + amount;
     const completedAt =
       savedAmount >= goal.targetAmount ? new Date().toISOString() : goal.completedAt;
-    await db.goals.update(goal.id!, { savedAmount, ...(completedAt ? { completedAt } : {}) });
+    const categoryId = await getOrCreateCofrinhoCategoryId();
+    await db.transaction("rw", db.goals, db.expenses, async () => {
+      await db.goals.update(goal.id!, { savedAmount, ...(completedAt ? { completedAt } : {}) });
+      await db.expenses.add({
+        categoryId,
+        description: `Cofrinho: ${goal.name}`,
+        amount,
+        date: todayISO(),
+        createdAt: new Date().toISOString(),
+      });
+    });
     setDepositingFor(null);
   }
 
