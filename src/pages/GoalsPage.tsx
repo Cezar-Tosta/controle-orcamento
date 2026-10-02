@@ -11,6 +11,7 @@ import { Icon } from "../components/Icon.tsx";
 import { Sheet } from "../components/Sheet.tsx";
 import { GoalForm } from "../components/GoalForm.tsx";
 import { DepositForm } from "../components/DepositForm.tsx";
+import { catchErrors } from "../utils/errors.ts";
 
 async function handleDelete(goal: Goal): Promise<void> {
   const confirmed = window.confirm(`Excluir a meta "${goal.name}"?`);
@@ -137,7 +138,7 @@ export function GoalsPage(): JSX.Element {
                 <div className="flex flex-shrink-0 flex-col items-center">
                   <button
                     type="button"
-                    onClick={() => void move(goal, -1)}
+                    onClick={() => catchErrors(move(goal, -1))}
                     disabled={index === 0}
                     className="rounded p-1 text-slate-400 hover:bg-slate-100 disabled:opacity-20 dark:hover:bg-slate-800"
                     aria-label="Subir prioridade"
@@ -146,7 +147,7 @@ export function GoalsPage(): JSX.Element {
                   </button>
                   <button
                     type="button"
-                    onClick={() => void move(goal, 1)}
+                    onClick={() => catchErrors(move(goal, 1))}
                     disabled={index === goals.length - 1}
                     className="rounded p-1 text-slate-400 hover:bg-slate-100 disabled:opacity-20 dark:hover:bg-slate-800"
                     aria-label="Descer prioridade"
@@ -183,7 +184,7 @@ export function GoalsPage(): JSX.Element {
                 </button>
                 <button
                   type="button"
-                  onClick={() => void handleDelete(goal)}
+                  onClick={() => catchErrors(handleDelete(goal))}
                   className="rounded-full p-1.5 text-slate-400 hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-950"
                   aria-label="Excluir"
                 >
@@ -207,7 +208,7 @@ export function GoalsPage(): JSX.Element {
         >
           <GoalForm
             initial={editing === "new" ? undefined : editing}
-            onSubmit={(data) => void handleSubmit(data)}
+            onSubmit={(data) => catchErrors(handleSubmit(data))}
           />
         </Sheet>
       )}
@@ -217,7 +218,7 @@ export function GoalsPage(): JSX.Element {
           title={`Guardar para "${depositingFor.name}"`}
           onClose={() => setDepositingFor(null)}
         >
-          <DepositForm onSubmit={(amount) => void handleDeposit(depositingFor, amount)} />
+          <DepositForm onSubmit={(amount) => catchErrors(handleDeposit(depositingFor, amount))} />
         </Sheet>
       )}
     </div>

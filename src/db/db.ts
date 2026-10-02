@@ -78,6 +78,21 @@ class BudgetDatabase extends Dexie {
 
 export const db = new BudgetDatabase();
 
+// If another open tab/instance (e.g. a regular Chrome tab left open besides
+// the installed PWA) is holding an older-schema connection, it blocks this
+// one from finishing its version upgrade — it just hangs with no feedback.
+// These two handlers make that recoverable instead of silently stuck:
+// the old connection closes itself and reloads, and if it can't (listener
+// didn't attach in time), this connection tells the user what to do.
+db.on("versionchange", () => {
+  db.close();
+  window.location.reload();
+});
+
+db.on("blocked", () => {
+  window.alert("Feche outras abas ou janelas deste app abertas no celular e tente de novo.");
+});
+
 // Colors follow a validated categorical order (see scripts/validate_palette.js
 // in the dataviz skill): fixed hue slots, never reassigned by rank, so the
 // dashboard's category chart stays colorblind-safe without per-user tuning.

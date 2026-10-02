@@ -1,19 +1,15 @@
-import { lazy, Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import type { ComponentType, JSX } from "react";
 import { seedDefaultCategories } from "./db/db.ts";
 import type { TabKey } from "./types/index.ts";
+import { catchErrors } from "./utils/errors.ts";
 import { BottomNav } from "./components/BottomNav.tsx";
+import { ErrorBoundary } from "./components/ErrorBoundary.tsx";
+import { DashboardPage } from "./pages/DashboardPage.tsx";
 import { ExpensesPage } from "./pages/ExpensesPage.tsx";
 import { GoalsPage } from "./pages/GoalsPage.tsx";
 import { CategoriesPage } from "./pages/CategoriesPage.tsx";
 import { SettingsPage } from "./pages/SettingsPage.tsx";
-
-// Charting (recharts) is the heaviest dependency, so the dashboard — the only
-// page that needs it — is split into its own chunk instead of shipping on
-// every first load of this offline-installed PWA.
-const DashboardPage = lazy(() =>
-  import("./pages/DashboardPage.tsx").then((module) => ({ default: module.DashboardPage })),
-);
 
 const PAGES: Record<TabKey, ComponentType> = {
   dashboard: DashboardPage,
@@ -27,16 +23,16 @@ export function App(): JSX.Element {
   const [tab, setTab] = useState<TabKey>("dashboard");
 
   useEffect(() => {
-    void seedDefaultCategories();
+    catchErrors(seedDefaultCategories());
   }, []);
 
   const Page = PAGES[tab];
 
   return (
     <div className="safe-top min-h-full">
-      <Suspense fallback={<div className="p-4 text-sm text-slate-400">Carregando…</div>}>
+      <ErrorBoundary>
         <Page />
-      </Suspense>
+      </ErrorBoundary>
       <BottomNav active={tab} onChange={setTab} />
     </div>
   );

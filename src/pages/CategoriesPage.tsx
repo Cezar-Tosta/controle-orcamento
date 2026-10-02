@@ -6,6 +6,7 @@ import { useCategories } from "../hooks/useLiveData.ts";
 import { Icon } from "../components/Icon.tsx";
 import { Sheet } from "../components/Sheet.tsx";
 import { CategoryForm } from "../components/CategoryForm.tsx";
+import { catchErrors } from "../utils/errors.ts";
 
 async function handleDelete(category: Category): Promise<void> {
   const expenseCount = await db.expenses.where("categoryId").equals(category.id!).count();
@@ -69,7 +70,7 @@ export function CategoriesPage(): JSX.Element {
               </button>
               <button
                 type="button"
-                onClick={() => void handleDelete(category)}
+                onClick={() => catchErrors(handleDelete(category))}
                 className="rounded-full p-1.5 text-slate-400 hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-950"
                 aria-label={`Excluir ${category.name}`}
               >
@@ -92,7 +93,7 @@ export function CategoriesPage(): JSX.Element {
         >
           <CategoryForm
             initial={editing === "new" ? undefined : editing}
-            onSubmit={(data) => void handleSubmit(data)}
+            onSubmit={(data) => catchErrors(handleSubmit(data))}
           />
         </Sheet>
       )}

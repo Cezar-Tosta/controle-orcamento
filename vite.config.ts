@@ -14,6 +14,10 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: "autoUpdate",
+      // We call registerSW() ourselves in main.tsx so a detected update
+      // reloads the page immediately instead of silently running stale JS
+      // against a newer, already-activated service worker.
+      injectRegister: false,
       includeAssets: ["icons/icon-192.png", "icons/icon-512.png"],
       manifest: {
         id: BASE_PATH,

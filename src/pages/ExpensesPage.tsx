@@ -8,6 +8,7 @@ import { formatCurrency } from "../utils/format.ts";
 import { Icon } from "../components/Icon.tsx";
 import { Sheet } from "../components/Sheet.tsx";
 import { ExpenseForm } from "../components/ExpenseForm.tsx";
+import { catchErrors } from "../utils/errors.ts";
 
 async function handleDelete(expense: Expense): Promise<void> {
   const confirmed = window.confirm(`Excluir "${expense.description}"?`);
@@ -141,7 +142,7 @@ export function ExpensesPage(): JSX.Element {
                 </button>
                 <button
                   type="button"
-                  onClick={() => void handleDelete(expense)}
+                  onClick={() => catchErrors(handleDelete(expense))}
                   className="rounded-full p-1.5 text-slate-400 hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-950"
                   aria-label="Excluir"
                 >
@@ -166,7 +167,7 @@ export function ExpensesPage(): JSX.Element {
           <ExpenseForm
             categories={categories}
             initial={editing === "new" ? undefined : editing}
-            onSubmit={(data) => void handleSubmit(data)}
+            onSubmit={(data) => catchErrors(handleSubmit(data))}
           />
         </Sheet>
       )}

@@ -16,6 +16,7 @@ import { Icon } from "../components/Icon.tsx";
 import { Sheet } from "../components/Sheet.tsx";
 import { BudgetForm } from "../components/BudgetForm.tsx";
 import { BudgetInjectionForm } from "../components/BudgetInjectionForm.tsx";
+import { catchErrors } from "../utils/errors.ts";
 
 async function handleExport(): Promise<void> {
   const payload = await exportBackup();
@@ -169,7 +170,7 @@ export function SettingsPage(): JSX.Element {
                     </span>
                     <button
                       type="button"
-                      onClick={() => void handleDeleteInjection(injection)}
+                      onClick={() => catchErrors(handleDeleteInjection(injection))}
                       className="rounded-full p-1 text-slate-400 hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-950"
                       aria-label="Remover valor extra"
                     >
@@ -220,7 +221,7 @@ export function SettingsPage(): JSX.Element {
         <div className="mt-3 flex gap-2">
           <button
             type="button"
-            onClick={() => void handleExport()}
+            onClick={() => catchErrors(handleExport())}
             className="flex items-center gap-1 rounded-full border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 dark:border-slate-700 dark:text-slate-200"
           >
             <Icon name="download" className="h-4 w-4" />
@@ -252,7 +253,7 @@ export function SettingsPage(): JSX.Element {
         </p>
         <button
           type="button"
-          onClick={() => void resetAllData()}
+          onClick={() => catchErrors(resetAllData())}
           className="mt-3 rounded-full bg-rose-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-rose-500"
         >
           Apagar todos os dados
@@ -264,13 +265,13 @@ export function SettingsPage(): JSX.Element {
           title={period ? "Editar orçamento" : "Cadastrar orçamento"}
           onClose={() => setEditingBudget(false)}
         >
-          <BudgetForm initial={period} onSubmit={(data) => void handleBudgetSubmit(data)} />
+          <BudgetForm initial={period} onSubmit={(data) => catchErrors(handleBudgetSubmit(data))} />
         </Sheet>
       )}
 
       {addingInjection && (
         <Sheet title="Adicionar valor extra" onClose={() => setAddingInjection(false)}>
-          <BudgetInjectionForm onSubmit={(data) => void handleInjectionSubmit(data)} />
+          <BudgetInjectionForm onSubmit={(data) => catchErrors(handleInjectionSubmit(data))} />
         </Sheet>
       )}
     </div>
