@@ -40,11 +40,23 @@ export interface BudgetPeriod {
   createdAt: string;
 }
 
+export interface BudgetInjection {
+  id?: number;
+  year: number;
+  /** 1-12 */
+  month: number;
+  amount: number;
+  /** ISO date (yyyy-MM-dd) the user received/added this extra amount. */
+  date: string;
+  createdAt: string;
+}
+
 class BudgetDatabase extends Dexie {
   categories!: EntityTable<Category, "id">;
   expenses!: EntityTable<Expense, "id">;
   goals!: EntityTable<Goal, "id">;
   budgetPeriods!: EntityTable<BudgetPeriod, "id">;
+  budgetInjections!: EntityTable<BudgetInjection, "id">;
 
   constructor() {
     super("controle-orcamento");
@@ -53,6 +65,13 @@ class BudgetDatabase extends Dexie {
       expenses: "++id, categoryId, date",
       goals: "++id, priority",
       budgetPeriods: "++id, &[year+month]",
+    });
+    this.version(2).stores({
+      categories: "++id, name",
+      expenses: "++id, categoryId, date",
+      goals: "++id, priority",
+      budgetPeriods: "++id, &[year+month]",
+      budgetInjections: "++id, [year+month]",
     });
   }
 }

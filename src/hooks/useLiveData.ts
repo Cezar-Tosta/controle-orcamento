@@ -1,6 +1,6 @@
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "../db/db.ts";
-import type { BudgetPeriod, Category, Expense, Goal } from "../db/db.ts";
+import type { BudgetInjection, BudgetPeriod, Category, Expense, Goal } from "../db/db.ts";
 
 export function useCategories(): Category[] {
   return useLiveQuery(() => db.categories.orderBy("name").toArray(), [], []);
@@ -29,6 +29,17 @@ export function useBudgetPeriod(year: number, month: number): BudgetPeriod | und
     () => db.budgetPeriods.where({ year, month }).first(),
     [year, month],
     undefined,
+  );
+}
+
+export function useBudgetInjections(year: number, month: number): BudgetInjection[] {
+  return useLiveQuery(
+    async () => {
+      const results = await db.budgetInjections.where({ year, month }).sortBy("date");
+      return results.toReversed();
+    },
+    [year, month],
+    [],
   );
 }
 
