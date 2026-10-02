@@ -22,14 +22,16 @@ export function StatCard({
   icon,
 }: StatCardProps): JSX.Element {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-      <div className="flex items-center justify-between">
-        <p className="text-xs font-medium text-slate-500 dark:text-slate-400">{label}</p>
+    <div className="min-w-0 rounded-2xl border border-slate-200 bg-white p-3.5 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+      <div className="flex items-center justify-between gap-1">
+        <p className="truncate text-xs font-medium text-slate-500 dark:text-slate-400">{label}</p>
         {icon}
       </div>
-      <p className={`mt-1 text-xl font-semibold tabular-nums ${TONE_CLASSES[tone]}`}>{value}</p>
+      <p className={`mt-1 truncate text-lg font-semibold tabular-nums ${TONE_CLASSES[tone]}`}>
+        {value}
+      </p>
       {hint !== undefined && (
-        <p className="mt-0.5 text-xs text-slate-400 dark:text-slate-500">{hint}</p>
+        <p className="mt-0.5 truncate text-xs text-slate-400 dark:text-slate-500">{hint}</p>
       )}
     </div>
   );

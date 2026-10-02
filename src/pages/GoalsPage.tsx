@@ -102,24 +102,28 @@ export function GoalsPage(): JSX.Element {
           return (
             <li
               key={goal.id}
-              className={`rounded-2xl border bg-white p-4 dark:bg-slate-900 ${
+              className={`rounded-2xl border bg-white p-3.5 dark:bg-slate-900 ${
                 isAffordable
                   ? "border-emerald-400 dark:border-emerald-600"
                   : "border-slate-200 dark:border-slate-800"
               }`}
             >
-              <div className="flex items-start justify-between">
-                <div>
+              <div className="flex items-start gap-2">
+                <div className="min-w-0 flex-1">
                   <p className="flex items-center gap-1.5 text-sm font-semibold text-slate-800 dark:text-slate-100">
-                    #{goal.priority} {goal.name}
-                    {goal.completedAt && <Icon name="check" className="h-4 w-4 text-emerald-500" />}
+                    <span className="truncate">
+                      #{goal.priority} {goal.name}
+                    </span>
+                    {goal.completedAt && (
+                      <Icon name="check" className="h-4 w-4 flex-shrink-0 text-emerald-500" />
+                    )}
                   </p>
-                  <p className="mt-0.5 text-xs text-slate-400">
+                  <p className="mt-0.5 truncate text-xs text-slate-400">
                     {formatCurrency(goal.savedAmount)} de {formatCurrency(goal.targetAmount)}
                     {!goal.completedAt && ` · faltam ${formatCurrency(remaining)}`}
                   </p>
                 </div>
-                <div className="flex flex-col items-center">
+                <div className="flex flex-shrink-0 flex-col items-center">
                   <button
                     type="button"
                     onClick={() => void move(goal, -1)}
@@ -141,19 +145,19 @@ export function GoalsPage(): JSX.Element {
                 </div>
               </div>
 
-              <div className="mt-3 h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
+              <div className="mt-2.5 h-2 w-full overflow-hidden rounded-full bg-slate-100 dark:bg-slate-800">
                 <div
                   className="h-full rounded-full bg-indigo-500 transition-all"
                   style={{ width: `${progress}%` }}
                 />
               </div>
 
-              <div className="mt-3 flex justify-end gap-1">
+              <div className="mt-2.5 flex items-center justify-end gap-0.5">
                 {!goal.completedAt && (
                   <button
                     type="button"
                     onClick={() => setDepositingFor(goal)}
-                    className="rounded-full px-3 py-1 text-xs font-medium text-indigo-600 hover:bg-indigo-50 dark:text-indigo-400 dark:hover:bg-indigo-950"
+                    className="mr-auto rounded-full px-2.5 py-1 text-xs font-medium text-indigo-600 hover:bg-indigo-50 dark:text-indigo-400 dark:hover:bg-indigo-950"
                   >
                     Guardar valor
                   </button>
@@ -161,7 +165,7 @@ export function GoalsPage(): JSX.Element {
                 <button
                   type="button"
                   onClick={() => setEditing(goal)}
-                  className="rounded-full p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+                  className="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-200"
                   aria-label="Editar"
                 >
                   <Icon name="edit" className="h-4 w-4" />
@@ -169,7 +173,7 @@ export function GoalsPage(): JSX.Element {
                 <button
                   type="button"
                   onClick={() => void handleDelete(goal)}
-                  className="rounded-full p-2 text-slate-400 hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-950"
+                  className="rounded-full p-1.5 text-slate-400 hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-950"
                   aria-label="Excluir"
                 >
                   <Icon name="trash" className="h-4 w-4" />

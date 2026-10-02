@@ -113,30 +113,28 @@ export function ExpensesPage(): JSX.Element {
           return (
             <li
               key={expense.id}
-              className="flex items-center justify-between rounded-2xl border border-slate-200 bg-white px-4 py-3 dark:border-slate-800 dark:bg-slate-900"
+              className="flex items-center gap-2 rounded-2xl border border-slate-200 bg-white px-3.5 py-2.5 dark:border-slate-800 dark:bg-slate-900"
             >
-              <div className="flex items-center gap-3">
-                <span
-                  className="h-2.5 w-2.5 flex-shrink-0 rounded-full"
-                  style={{ backgroundColor: category?.color ?? "#94a3b8" }}
-                />
-                <div>
-                  <p className="text-sm font-medium text-slate-800 dark:text-slate-100">
-                    {expense.description}
-                  </p>
-                  <p className="text-xs text-slate-400">
-                    {category?.name ?? "Sem categoria"} · {shortDateLabel(expense.date)}
-                  </p>
-                </div>
+              <span
+                className="h-2.5 w-2.5 flex-shrink-0 rounded-full"
+                style={{ backgroundColor: category?.color ?? "#94a3b8" }}
+              />
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-medium text-slate-800 dark:text-slate-100">
+                  {expense.description}
+                </p>
+                <p className="truncate text-xs text-slate-400">
+                  {category?.name ?? "Sem categoria"} · {shortDateLabel(expense.date)}
+                </p>
               </div>
-              <div className="flex items-center gap-1">
+              <div className="flex flex-shrink-0 items-center gap-0.5">
                 <span className="mr-1 text-sm font-semibold tabular-nums text-slate-800 dark:text-slate-100">
                   {formatCurrency(expense.amount)}
                 </span>
                 <button
                   type="button"
                   onClick={() => setEditing(expense)}
-                  className="rounded-full p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-200"
+                  className="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-700 dark:hover:bg-slate-800 dark:hover:text-slate-200"
                   aria-label="Editar"
                 >
                   <Icon name="edit" className="h-4 w-4" />
@@ -144,7 +142,7 @@ export function ExpensesPage(): JSX.Element {
                 <button
                   type="button"
                   onClick={() => void handleDelete(expense)}
-                  className="rounded-full p-2 text-slate-400 hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-950"
+                  className="rounded-full p-1.5 text-slate-400 hover:bg-rose-50 hover:text-rose-600 dark:hover:bg-rose-950"
                   aria-label="Excluir"
                 >
                   <Icon name="trash" className="h-4 w-4" />
